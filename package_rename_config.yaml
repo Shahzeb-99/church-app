@@ -1,0 +1,31 @@
+package_rename_config:
+  android:
+    app_name: "Saint Pope Kerollos VI" # (String) The display name of the android app
+    package_name: "org.saintpopekerollosvi.android" # (String) The package name of the android app
+    override_old_package: "org.saintpopekerollosvi" # (Optional) (String) Use this to delete the old folder structure of MainActivity or to use the existing code with the new package name
+    lang: "kotlin" # (Optional) (String) The android development language {kotlin(default) or java}
+
+  ios:
+    app_name: "Saint Pope Kerollos VI" # (String) The display name of the ios app
+    bundle_name: "org.saintpopekerollosvi.ios" # (String) The bundle name of the ios app
+    package_name: "org.saintpopekerollosvi.ios" # (String) The product bundle identifier of the ios app
+
+  linux:
+    app_name: "Saint Pope Kerollos VI" # (String) The window title of the linux app
+    package_name: "org.saintpopekerollosvi.linux" # (String) The application id of the linux app
+    exe_name: "saintpopekerollosvi" # (String) The executable name (binary name) of the linux app
+
+  macos:
+    app_name: "Saint Pope Kerollos VI" # (String) The product name of the macos app
+    package_name: "org.saintpopekerollosvi.macos" # (String) The product bundle identifier of the macos app
+    copyright_notice: "© 2023 Saint Pope Kerollos VI" # (String) The product copyright of the macos app
+
+  web:
+    app_name: "Saint Pope Kerollos VI" # (String) The title and display name of the web app and PWA
+    description: "Official website of Saint Pope Kerollos VI" # (String) The description of the web app and PWA
+
+  windows:
+    app_name: "Saint Pope Kerollos VI" # (String) The window title & software name of the windows app
+    organization: "Saint Pope Kerollos VI Organization" # (String) The organization name (company name) of the windows app
+    copyright_notice: "© 2023 Saint Pope Kerollos VI Organization" # (String) The legal copyright of the windows app
+    exe_name: "saintpopekerollosvi" # (String) The executable name (binary name) of the windows app
