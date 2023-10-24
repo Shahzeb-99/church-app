@@ -32,10 +32,10 @@ class AppThemeData {
   //static ThemeData lightThemeData = themeData(lightColorScheme, _lightFocusColor);
   static ThemeData lightThemeData = FlexThemeData.light(
     textTheme: _textTheme,
+    primary: Color(0xFF5D0000),
     scheme: FlexScheme.red,
-
   ).copyWith(
-    appBarTheme: AppBarTheme(titleTextStyle: _textTheme.headlineMedium,elevation: 0 ),
+    appBarTheme: AppBarTheme(titleTextStyle: _textTheme.headlineMedium, elevation: 0),
     outlinedButtonTheme: OutlinedButtonThemeData(
       style: OutlinedButton.styleFrom(
         shape: RoundedRectangleBorder(
@@ -56,15 +56,18 @@ class AppThemeData {
     inputDecorationTheme: _inputDecorationTheme,
   );
 
-  static ThemeData darkThemeData = FlexThemeData.dark(textTheme: _textTheme, scheme: FlexScheme.red, ).copyWith(
-      appBarTheme: AppBarTheme(titleTextStyle: _textTheme.headlineMedium ,elevation: 0),
+  static ThemeData darkThemeData = FlexThemeData.dark(
+    textTheme: _textTheme,
+    scheme: FlexScheme.red,
+  ).copyWith(
+      appBarTheme: AppBarTheme(titleTextStyle: _textTheme.headlineMedium, elevation: 0),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
       ),
       outlinedButtonTheme:
-      OutlinedButtonThemeData(style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))),
+          OutlinedButtonThemeData(style: OutlinedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))),
       elevatedButtonTheme:
-      ElevatedButtonThemeData(style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))),
+          ElevatedButtonThemeData(style: ElevatedButton.styleFrom(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)))),
       inputDecorationTheme: _inputDecorationTheme);
 
   static ThemeData themeData(ColorScheme colorScheme, Color focusColor) {
@@ -136,33 +139,33 @@ class AppThemeData {
   static final InputDecorationTheme _inputDecorationTheme = InputDecorationTheme(
     filled: true,
     //fillColor: Colors.white,
-    prefixIconColor: Colors.red,
+    prefixIconColor: Color(0xFF5D0000),
     floatingLabelBehavior: FloatingLabelBehavior.always,
     // Set the border radius for the text field
     focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),
-      borderSide: const BorderSide(color: Colors.red, width: 2),
+      //borderSide: const BorderSide(color: Colors.red, width: 2),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),
-      borderSide: const BorderSide(color: Colors.red, width: 2),
+      //borderSide: const BorderSide(color: Colors.red, width: 2),
     ),
     disabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),
-      borderSide: const BorderSide(color: Colors.red, width: 2),
+      //borderSide: const BorderSide(color: Colors.red, width: 2),
     ),
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(12.0),
-      borderSide: const BorderSide(color: Colors.red, width: 2),
+      //borderSide: const BorderSide(color: Colors.red, width: 2),
     ),
     // Set the border color for the text field
     enabledBorder: OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.red, width: 2),
+      //borderSide: const BorderSide(color: Colors.red, width: 2),
       borderRadius: BorderRadius.circular(12.0),
     ),
     // Set the focused border color for the text field
     focusedBorder: OutlineInputBorder(
-      borderSide: const BorderSide(color: Colors.red, width: 2),
+      //borderSide: const BorderSide(color: Colors.red, width: 2),
       borderRadius: BorderRadius.circular(12.0),
     ),
   );

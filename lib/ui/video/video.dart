@@ -2,7 +2,8 @@ import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:saintpopekerollosvi/data/sharedpref/constants/preferences.dart';
 import 'package:saintpopekerollosvi/di/components/service_locator.dart';
-import 'package:saintpopekerollosvi/stores/calendar/calendar_store.dart';
+import 'package:saintpopekerollosvi/stores/video/video_store.dart';
+import 'package:saintpopekerollosvi/ui/video/play_video.dart';
 import 'package:saintpopekerollosvi/utils/routes/routes.dart';
 import 'package:saintpopekerollosvi/stores/language/language_store.dart';
 import 'package:saintpopekerollosvi/stores/post/post_store.dart';
@@ -17,65 +18,56 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:googleapis/calendar/v3.dart' as googleApi;
 import 'package:syncfusion_flutter_calendar/calendar.dart';
 
-import 'calendar_source.dart';
-
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({
+class VideoScreen extends StatefulWidget {
+  const VideoScreen({
     super.key,
   });
 
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  _VideoScreenState createState() => _VideoScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _VideoScreenState extends State<VideoScreen> {
   //stores:---------------------------------------------------------------------
   late PostStore _postStore;
   late ThemeStore _themeStore;
   late LanguageStore _languageStore;
 
-  CalendarStore _calendarStore = getIt<CalendarStore>();
+  ScrollController _scrollController = ScrollController();
 
-
-  @override
-  void didChangeDependencies() {
-    _languageStore = Provider.of<LanguageStore>(context);
-    _themeStore = Provider.of<ThemeStore>(context);
-    _postStore = Provider.of<PostStore>(context);
-    super.didChangeDependencies();
-  }
+  VideoStore _videoStore = getIt<VideoStore>();
 
   @override
   void initState() {
-    _calendarStore.getEvents();
+    _videoStore.getVideo();
+
     super.initState();
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // initializing stores
+    _languageStore = Provider.of<LanguageStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
+    _postStore = Provider.of<PostStore>(context);
+
+    // check to see if already called api
+    if (!_postStore.loading) {
+      _postStore.getPosts();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: _buildAppBar(),
-        body: Observer(builder: (context) {
-          print(_calendarStore.eventList.length);
-
-          return SfCalendar(
-
-            dataSource: GoogleDataSource(_calendarStore.getCalendarEventResponse?.items ?? [],context),
-            view: CalendarView.month,
-            monthViewSettings: MonthViewSettings(
-
-              appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
-              showAgenda: true,
-
-            ),
-          );
-        }));
+    return Scaffold(appBar: _buildAppBar(), body: _buildBody());
   }
 
   // app bar methods:-----------------------------------------------------------
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: Text('Events'),
+      title: Text('Videos'),
       actions: _buildActions(context),
     );
   }
@@ -84,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return <Widget>[
       _buildGoogleSignInButton(),
       // _buildLanguageButton(),
-       _buildThemeButton(),
+      // _buildThemeButton(),
       _buildLogoutButton(),
     ];
   }
@@ -159,15 +151,23 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return _postStore.loading ? CustomProgressIndicatorWidget() : Material(child: _buildListView());
+        return _videoStore.isGetYoutubeVideoInProcess ? CustomProgressIndicatorWidget() : Material(child: _buildListView());
       },
     );
   }
 
   Widget _buildListView() {
-    return _postStore.postList != null
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        // Call your function here
+        _videoStore.getMoreVideos(); // Replace this with the function you want to call
+      }
+    });
+
+    return _videoStore.getYoutubeVideoResponse != null
         ? ListView.separated(
-            itemCount: _postStore.postList!.posts!.length,
+            controller: _scrollController,
+            itemCount: _videoStore.videoList.length,
             separatorBuilder: (context, position) {
               return Divider();
             },
@@ -183,18 +183,27 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildListItem(int position) {
+    final item = _videoStore.videoList[position].snippet;
+
     return ListTile(
+      onTap: (){
+
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>YoutubePlayer(item: _videoStore.videoList[position],)));
+
+      },
       dense: true,
-      leading: Icon(Icons.cloud_circle),
+      leading: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+          child: Image.network(item?.thumbnails?.thumbnailsDefault?.url ?? '',fit: BoxFit.cover,)),
       title: Text(
-        '${_postStore.postList?.posts?[position].title}',
+        '${item?.title ?? ''}',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         softWrap: false,
-        style: Theme.of(context).textTheme.subtitle1,
+        style: Theme.of(context).textTheme.titleMedium,
       ),
       subtitle: Text(
-        '${_postStore.postList?.posts?[position].body}',
+        '${item?.publishedAt.toString() ?? ''}',
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
         softWrap: false,

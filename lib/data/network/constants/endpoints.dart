@@ -12,4 +12,6 @@ class Endpoints {
 
   // booking endpoints
   static const String getPosts = baseUrl + "/posts";
+  static const String getVideos = 'https://www.googleapis.com/youtube/v3/search';
+  static const String getEvents = 'https://www.googleapis.com/calendar/v3/calendars/stpopekyrillosvi%40gmail.com/events';
 }

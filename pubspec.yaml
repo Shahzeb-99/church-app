@@ -88,6 +88,12 @@ dependencies:
   google_fonts: ^4.0.4
   flex_color_scheme: ^7.0.5
   firebase_core: ^2.19.0
+  syncfusion_flutter_calendar: ^21.2.3
+  google_sign_in: ^6.1.5
+  googleapis_auth: ^1.4.1
+  googleapis: ^11.3.0
+  youtube_player_iframe: ^4.0.4
+  timeago: ^3.3.0
 
 dev_dependencies:
   flutter_test:
