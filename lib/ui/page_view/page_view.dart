@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:saintpopekerollosvi/ui/video/play_video.dart';
 import '../../constants/app_theme.dart';
+import '../../models/video/get_video_response.dart';
 import '../home/home.dart';
+import '../live/live_video.dart';
 import '../video/video.dart';
 
 class PageViewScreen extends StatefulWidget {
@@ -10,7 +14,17 @@ class PageViewScreen extends StatefulWidget {
   State<PageViewScreen> createState() => _PageViewScreenState();
 }
 
+
+
 class _PageViewScreenState extends State<PageViewScreen> {
+
+@override
+  void initState() {
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+  );
+    super.initState();
+  }
   int currentPageIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -39,7 +53,8 @@ class _PageViewScreenState extends State<PageViewScreen> {
     // This function builds the widget that displays the current page, based on the value of the `currentIndex` variable.
     return <Widget>[
       const HomeScreen(),
-      Container(),
+      LiveVideoScreen(),
+      // YoutubePlayer(item: Item(id: Id(videoId: 'ghNMbCfBv_k'))),
       VideoScreen(),
     ][currentPageIndex];
   }

@@ -1,8 +1,11 @@
 import 'package:another_flushbar/flushbar_helper.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
+import 'package:saintpopekerollosvi/data/sharedpref/constants/preferences.dart';
 import 'package:saintpopekerollosvi/di/components/service_locator.dart';
 import 'package:saintpopekerollosvi/stores/video/video_store.dart';
 import 'package:saintpopekerollosvi/ui/video/play_video.dart';
+import 'package:saintpopekerollosvi/utils/routes/routes.dart';
 import 'package:saintpopekerollosvi/stores/language/language_store.dart';
 import 'package:saintpopekerollosvi/stores/post/post_store.dart';
 import 'package:saintpopekerollosvi/stores/theme/theme_store.dart';
@@ -12,24 +15,24 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:cached_network_image/cached_network_image.dart';
 
-class VideoScreen extends StatefulWidget {
-  const VideoScreen({
+class LiveVideoScreen extends StatefulWidget {
+  const LiveVideoScreen({
     super.key,
   });
 
   @override
-  _VideoScreenState createState() => _VideoScreenState();
+  _LiveVideoScreenState createState() => _LiveVideoScreenState();
 }
 
-class _VideoScreenState extends State<VideoScreen> {
+class _LiveVideoScreenState extends State<LiveVideoScreen> {
   //stores:---------------------------------------------------------------------
   late PostStore _postStore;
-
-  // late ThemeStore _themeStore;
-  // late LanguageStore _languageStore;
+  late ThemeStore _themeStore;
+  late LanguageStore _languageStore;
 
   ScrollController _scrollController = ScrollController();
 
@@ -37,25 +40,25 @@ class _VideoScreenState extends State<VideoScreen> {
 
   @override
   void initState() {
-    _videoStore.getVideo();
+    _videoStore.getLiveVideo();
 
     super.initState();
   }
 
-  // @override
-  // void didChangeDependencies() {
-  //   super.didChangeDependencies();
-  //
-  //   // initializing stores
-  //   _languageStore = Provider.of<LanguageStore>(context);
-  //   _themeStore = Provider.of<ThemeStore>(context);
-  //   _postStore = Provider.of<PostStore>(context);
-  //
-  //   // check to see if already called api
-  //   if (!_postStore.loading) {
-  //     _postStore.getPosts();
-  //   }
-  // }
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    // initializing stores
+    _languageStore = Provider.of<LanguageStore>(context);
+    _themeStore = Provider.of<ThemeStore>(context);
+    _postStore = Provider.of<PostStore>(context);
+
+    // check to see if already called api
+    if (!_postStore.loading) {
+      _postStore.getPosts();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,20 +68,20 @@ class _VideoScreenState extends State<VideoScreen> {
   // app bar methods:-----------------------------------------------------------
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
-      title: Text('Videos'),
+      title: Text('Live Stream'),
       // actions: _buildActions(context),
     );
   }
 
   // List<Widget> _buildActions(BuildContext context) {
   //   return <Widget>[
-  //     // _buildGoogleSignInButton(),
-  //     // // _buildLanguageButton(),
-  //     // // _buildThemeButton(),
-  //     // _buildLogoutButton(),
+  //     _buildGoogleSignInButton(),
+  //     // _buildLanguageButton(),
+  //     // _buildThemeButton(),
+  //     _buildLogoutButton(),
   //   ];
   // }
-
+  //
   // Widget _buildThemeButton() {
   //   return Observer(
   //     builder: (context) {
@@ -93,7 +96,7 @@ class _VideoScreenState extends State<VideoScreen> {
   //     },
   //   );
   // }
-
+  //
   // Widget _buildLogoutButton() {
   //   return IconButton(
   //     onPressed: () {
@@ -141,8 +144,9 @@ class _VideoScreenState extends State<VideoScreen> {
     return Observer(builder: (context) {
       return Stack(
         children: <Widget>[
+          _handleErrorMessage(),
           _buildMainContent(),
-          if (_videoStore.isGetMoreYoutubeVideoInProcess)
+          if (_videoStore.isGetMoreYoutubeLiveVideoInProcess)
             Align(
               alignment: Alignment.bottomCenter,
               child: LinearProgressIndicator(),
@@ -155,7 +159,7 @@ class _VideoScreenState extends State<VideoScreen> {
   Widget _buildMainContent() {
     return Observer(
       builder: (context) {
-        return _videoStore.isGetYoutubeVideoInProcess ? CustomProgressIndicatorWidget() : Material(child: _buildListView());
+        return _videoStore.isGetYoutubeLiveVideoInProcess ? CustomProgressIndicatorWidget() : Material(child: _buildListView());
       },
     );
   }
@@ -164,14 +168,14 @@ class _VideoScreenState extends State<VideoScreen> {
     _scrollController.addListener(() {
       if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
         // Call your function here
-        _videoStore.getMoreVideos(); // Replace this with the function you want to call
+        _videoStore.getMoreLiveVideos(); // Replace this with the function you want to call
       }
     });
 
-    return _videoStore.videoList.isNotEmpty
+    return _videoStore.liveVideoList.isNotEmpty
         ? ListView.separated(
             controller: _scrollController,
-            itemCount: _videoStore.videoList.length,
+            itemCount: _videoStore.liveVideoList.length,
             separatorBuilder: (context, position) {
               return Divider();
             },
@@ -192,7 +196,7 @@ class _VideoScreenState extends State<VideoScreen> {
                   ),
                 ),
                 Text(
-                  'No Videos Available',
+                  'Not currently streaming',
                   style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Theme.of(context).primaryColor),
                 ),
               ],
@@ -201,7 +205,7 @@ class _VideoScreenState extends State<VideoScreen> {
   }
 
   Widget _buildListItem(int position) {
-    final item = _videoStore.videoList[position].snippet;
+    final item = _videoStore.liveVideoList[position].snippet;
 
     return CustomListItem(
       onTap: () {
@@ -209,7 +213,7 @@ class _VideoScreenState extends State<VideoScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => YoutubePlayer(
-              item: _videoStore.videoList[position],
+              item: _videoStore.liveVideoList[position],
             ),
           ),
         );
@@ -220,6 +224,32 @@ class _VideoScreenState extends State<VideoScreen> {
     );
   }
 
+  Widget _handleErrorMessage() {
+    return Observer(
+      builder: (context) {
+        if (_postStore.errorStore.errorMessage.isNotEmpty) {
+          return _showErrorMessage(_postStore.errorStore.errorMessage);
+        }
+
+        return SizedBox.shrink();
+      },
+    );
+  }
+
+  // General Methods:-----------------------------------------------------------
+  _showErrorMessage(String message) {
+    Future.delayed(Duration(milliseconds: 0), () {
+      if (message.isNotEmpty) {
+        FlushbarHelper.createError(
+          message: message,
+          title: AppLocalizations.of(context).translate('home_tv_error'),
+          duration: Duration(seconds: 3),
+        )..show(context);
+      }
+    });
+
+    return SizedBox.shrink();
+  }
 //
 // _buildLanguageDialog() {
 //   _showDialog<String>(
@@ -268,7 +298,7 @@ class _VideoScreenState extends State<VideoScreen> {
 //     ),
 //   );
 // }
-//
+
 // _showDialog<T>({required BuildContext context, required Widget child}) {
 //   showDialog<T>(
 //     context: context,

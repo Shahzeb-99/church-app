@@ -38,6 +38,11 @@ class SharedPreferenceHelper {
     return _sharedPreference.getBool(Preferences.is_dark_mode) ?? false;
   }
 
+
+  Future<bool> saveDeviceToken(String deviceToken) async {
+    return _sharedPreference.setString(Preferences.device_token, deviceToken);
+  }
+
   Future<void> changeBrightnessToDark(bool value) {
     return _sharedPreference.setBool(Preferences.is_dark_mode, value);
   }

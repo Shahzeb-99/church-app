@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:another_flushbar/flushbar_helper.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:googleapis/calendar/v3.dart' as calendarApi;
+
 import 'package:saintpopekerollosvi/data/sharedpref/constants/preferences.dart';
 import 'package:saintpopekerollosvi/di/components/service_locator.dart';
 import 'package:saintpopekerollosvi/stores/calendar/calendar_store.dart';
@@ -14,8 +18,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:material_dialog/material_dialog.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:googleapis/calendar/v3.dart' as googleApi;
+import "package:googleapis_auth/auth_io.dart";
 import 'package:syncfusion_flutter_calendar/calendar.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher_string.dart';
 
 import 'calendar_source.dart';
 
@@ -35,7 +41,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late LanguageStore _languageStore;
 
   CalendarStore _calendarStore = getIt<CalendarStore>();
-
 
   @override
   void didChangeDependencies() {
@@ -59,14 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
           print(_calendarStore.eventList.length);
 
           return SfCalendar(
-
-            dataSource: GoogleDataSource(_calendarStore.getCalendarEventResponse?.items ?? [],context),
+            dataSource: GoogleDataSource(_calendarStore.getCalendarEventResponse?.items ?? [], context),
             view: CalendarView.month,
             monthViewSettings: MonthViewSettings(
-
               appointmentDisplayMode: MonthAppointmentDisplayMode.indicator,
               showAgenda: true,
-
             ),
           );
         }));
@@ -76,17 +78,66 @@ class _HomeScreenState extends State<HomeScreen> {
   PreferredSizeWidget _buildAppBar() {
     return AppBar(
       title: Text('Events'),
-      actions: _buildActions(context),
+      // actions: _buildActions(context),
     );
   }
+  //
+  // List<Widget> _buildActions(BuildContext context) {
+  //   return <Widget>[
+  //     _buildGoogleSignInButton(),
+  //     // _buildLanguageButton(),
+  //     _buildThemeButton(),
+  //     _buildLogoutButton(),
+  //   ];
+  // }
 
-  List<Widget> _buildActions(BuildContext context) {
-    return <Widget>[
-      _buildGoogleSignInButton(),
-      // _buildLanguageButton(),
-       _buildThemeButton(),
-      _buildLogoutButton(),
-    ];
+  hmm() {
+    calendarApi.Event event = calendarApi.Event(); // Create object of event
+    event.summary = 'summardsggdsfsdfdsfdsfsdfsdfyText'; //Setting summary of object
+
+    calendarApi.EventDateTime start = new calendarApi.EventDateTime(); //Setting start time
+    start.dateTime = DateTime.now();
+    start.timeZone = "GMT+05:00";
+    event.start = start;
+
+    calendarApi.EventDateTime end = new calendarApi.EventDateTime(); //setting end time
+    end.timeZone = "GMT+05:00";
+    end.dateTime = DateTime.now().add(Duration(days: 5));
+    event.end = end;
+
+    insertEvent(event);
+  }
+
+  insertEvent(calendarApi.Event event) {
+    try {
+      clientViaUserConsent(
+          ClientId('289605575676-5csing7me517q35f22up995qg6ucimr4.apps.googleusercontent.com',
+              ),
+          [calendarApi.CalendarApi.calendarEventsScope], (value) async {
+        if (await canLaunch(
+          value,
+        )) {
+          await launchUrlString(
+            value,
+          );
+        } else {
+          throw 'Could not launch $value';
+        }
+      } ).then((AuthClient client) {
+        var calendar = calendarApi.CalendarApi(client);
+        String calendarId = "primary";
+        calendar.events.insert(event, calendarId).then((value) {
+          print("ADDEDDD_________________${value.status}");
+          if (value.status == "confirmed") {
+            log('Event added in google calendar');
+          } else {
+            log("Unable to add event in google calendar");
+          }
+        });
+      });
+    } catch (e) {
+      log('Error creating event $e');
+    }
   }
 
   Widget _buildThemeButton() {
@@ -103,58 +154,58 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
+  //
+  // Widget _buildLogoutButton() {
+  //   return IconButton(
+  //     onPressed: () {
+  //       SharedPreferences.getInstance().then((preference) {
+  //         preference.setBool(Preferences.is_logged_in, false);
+  //         Navigator.of(context).pushReplacementNamed(Routes.login);
+  //       });
+  //     },
+  //     icon: Icon(
+  //       Icons.power_settings_new,
+  //     ),
+  //   );
+  // }
 
-  Widget _buildLogoutButton() {
-    return IconButton(
-      onPressed: () {
-        SharedPreferences.getInstance().then((preference) {
-          preference.setBool(Preferences.is_logged_in, false);
-          Navigator.of(context).pushReplacementNamed(Routes.login);
-        });
-      },
-      icon: Icon(
-        Icons.power_settings_new,
-      ),
-    );
-  }
+  // Widget _buildLanguageButton() {
+  //   return IconButton(
+  //     onPressed: () {
+  //       _buildLanguageDialog();
+  //     },
+  //     icon: Icon(
+  //       Icons.language,
+  //     ),
+  //   );
+  // }
 
-  Widget _buildLanguageButton() {
-    return IconButton(
-      onPressed: () {
-        _buildLanguageDialog();
-      },
-      icon: Icon(
-        Icons.language,
-      ),
-    );
-  }
+  // Widget _buildGoogleSignInButton() {
+  //   return IconButton(
+  //     onPressed: () async {
+  //       final GoogleSignIn _googleSignIn = GoogleSignIn(
+  //         // clientId: '289605575676-5csing7me517q35f22up995qg6ucimr4.apps.googleusercontent.com',
+  //         scopes: <String>[calendarApi.CalendarApi.calendarEventsScope],
+  //       );
+  //       await _googleSignIn.signIn();
+  //       hmm();
+  //       print((_googleSignIn.scopes)!);
+  //     },
+  //     icon: Icon(
+  //       Icons.login,
+  //     ),
+  //   );
+  // }
 
-  Widget _buildGoogleSignInButton() {
-    return IconButton(
-      onPressed: () {
-        final GoogleSignIn _googleSignIn = GoogleSignIn(
-          clientId: '289605575676-5csing7me517q35f22up995qg6ucimr4.apps.googleusercontent.com',
-          scopes: <String>[
-            'https://www.googleapis.com/auth/calendar',
-          ],
-        );
-        _googleSignIn.signIn();
-      },
-      icon: Icon(
-        Icons.login,
-      ),
-    );
-  }
-
-  // body methods:--------------------------------------------------------------
-  Widget _buildBody() {
-    return Stack(
-      children: <Widget>[
-        _handleErrorMessage(),
-        _buildMainContent(),
-      ],
-    );
-  }
+  // // body methods:--------------------------------------------------------------
+  // Widget _buildBody() {
+  //   return Stack(
+  //     children: <Widget>[
+  //       _handleErrorMessage(),
+  //       _buildMainContent(),
+  //     ],
+  //   );
+  // }
 
   Widget _buildMainContent() {
     return Observer(
