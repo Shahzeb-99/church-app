@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:saintpopekerollosvi/data/network/constants/endpoints.dart';
 import 'package:saintpopekerollosvi/data/network/dio_client.dart';
+import '../../../../constants/strings.dart';
 import '../../../../models/video/get_video_response.dart';
 import '../../../../models/video/get_video_statistics_response.dart';
 
@@ -18,7 +19,7 @@ class VideoApi {
     try {
       final res = await _dioClient.get(Endpoints.getVideoList, queryParameters: {
         'part': 'snippet',
-        'channelId': 'UCovfThYKTmUW-CDmm0RG3Tg',
+        'channelId': Strings.youtubeChannelId,
         'type': 'video',
         'order': 'date',
         'maxResults': 10,
@@ -37,7 +38,7 @@ class VideoApi {
     try {
       final res = await _dioClient.get(Endpoints.getVideoList, queryParameters: {
         'part': 'snippet',
-        'channelId': 'UCovfThYKTmUW-CDmm0RG3Tg',
+        'channelId': Strings.youtubeChannelId,
         'type': 'video',
         'eventType': 'live',
         'order': 'date',

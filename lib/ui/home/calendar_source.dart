@@ -7,14 +7,12 @@ class GoogleDataSource extends CalendarDataSource {
   final List<Item> appointments;
   final BuildContext context;
 
-  GoogleDataSource(this.appointments,this.context);
+  GoogleDataSource(this.appointments, this.context);
 
   @override
   DateTime getStartTime(int index) {
     return appointments[index].start?.dateTime ?? DateTime.now();
   }
-
-
 
   @override
   DateTime getEndTime(int index) {
@@ -26,12 +24,11 @@ class GoogleDataSource extends CalendarDataSource {
     return appointments![index].summary ?? '';
   }
 
-
   @override
-  getColor(int index){
+  getColor(int index) {
     return Color(0xFF5D0000);
-
   }
+
   @override
   bool isAllDay(int index) {
     return appointments![index].end == null;

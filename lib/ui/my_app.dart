@@ -8,8 +8,6 @@ import '../stores/language/language_store.dart';
 import '../stores/post/post_store.dart';
 import '../stores/theme/theme_store.dart';
 import '../stores/user/user_store.dart';
-import '../ui/home/home.dart';
-import '../ui/login/login.dart';
 import '../utils/locale/app_localization.dart';
 import '../utils/routes/routes.dart';
 import 'package:flutter/material.dart';
@@ -17,8 +15,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:provider/provider.dart';
 
-import '../di/components/service_locator.dart';
-import '../stores/theme/theme_store.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -27,7 +23,6 @@ class MyApp extends StatelessWidget {
   final ThemeStore _themeStore = ThemeStore(getIt<Repository>());
   final PostStore _postStore = PostStore(getIt<Repository>());
   final LanguageStore _languageStore = LanguageStore(getIt<Repository>());
-  final UserStore _userStore = UserStore(getIt<Repository>());
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +38,7 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
             title: Strings.appName,
-            theme: _themeStore.darkMode
-                ? AppThemeData.darkThemeData
-                : AppThemeData.lightThemeData,
+            theme:   AppThemeData.lightThemeData,
             routes: Routes.routes,
             locale: Locale(_languageStore.locale),
             supportedLocales: _languageStore.supportedLanguages

@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDTTOsdWPdeOEZWZq0q0y7XZRmviLroEXY',
-    appId: '1:289605575676:android:d743f1af9f2cb0ad894879',
-    messagingSenderId: '289605575676',
-    projectId: 'church-flutter-app',
-    storageBucket: 'church-flutter-app.appspot.com',
+    apiKey: 'AIzaSyBueREFZ9ETJnKOAX3SvtjTqQYiuXxSj0s',
+    appId: '1:50019471864:android:99777014b162a32d97860d',
+    messagingSenderId: '50019471864',
+    projectId: 'saintpopekerollosvi',
+    storageBucket: 'saintpopekerollosvi.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDjJBfjtdtIJxbi-Q8EPV4Cnwxv06Mp1lo',
-    appId: '1:289605575676:ios:c7a3475e9a54cb44894879',
-    messagingSenderId: '289605575676',
-    projectId: 'church-flutter-app',
-    storageBucket: 'church-flutter-app.appspot.com',
+    apiKey: 'AIzaSyC-mSBTOVW5Ls8_sknsosbqeXTHOE3ffuo',
+    appId: '1:50019471864:ios:83a019cc72c7541b97860d',
+    messagingSenderId: '50019471864',
+    projectId: 'saintpopekerollosvi',
+    storageBucket: 'saintpopekerollosvi.appspot.com',
     iosBundleId: 'org.saintpopekerollosvi.ios',
   );
 }

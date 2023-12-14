@@ -40,6 +40,12 @@ class _YoutubePlayerState extends State<YoutubePlayer> {
   }
 
   @override
+  void dispose() {
+    _ytbPlayerController.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(

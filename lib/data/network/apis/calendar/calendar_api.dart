@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:intl/intl.dart';
 import 'package:saintpopekerollosvi/data/network/constants/endpoints.dart';
 import 'package:saintpopekerollosvi/data/network/dio_client.dart';
+import '../../../../models/announcment/announcement.dart';
 import '../../../../models/calendar/get_calendar_event_response.dart';
 import '../../../../models/video/get_video_response.dart';
 
@@ -26,6 +27,17 @@ class CalendarApi {
         'maxResults': 1000,
       });
       return GetGoogleCalendarEventsResponse.fromJson(res);
+    } catch (e) {
+      print(e.toString());
+      rethrow;
+    }
+  }
+
+  /// Returns [GetAllNotificationResponse] object in response
+  Future<GetAllNotificationResponse> getNotification() async {
+    try {
+      final res = await _dioClient.get(Endpoints.getAllNotifications, );
+      return GetAllNotificationResponse.fromJson(res);
     } catch (e) {
       print(e.toString());
       rethrow;

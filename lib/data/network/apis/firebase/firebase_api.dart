@@ -79,6 +79,7 @@ class FirebaseApi {
 
     await SharedPreferenceHelper(await SharedPreferences.getInstance()).saveDeviceToken(fCMToken!);
     print(fCMToken);
+    await FirebaseMessaging.instance.subscribeToTopic('allDevices');
     await initPushNotifications();
     await initLocalNotifications();
   }

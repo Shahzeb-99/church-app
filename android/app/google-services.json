@@ -1,51 +1,26 @@
 {
   "project_info": {
-    "project_number": "289605575676",
-    "project_id": "church-flutter-app",
-    "storage_bucket": "church-flutter-app.appspot.com"
+    "project_number": "50019471864",
+    "project_id": "saintpopekerollosvi",
+    "storage_bucket": "saintpopekerollosvi.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:289605575676:android:d743f1af9f2cb0ad894879",
+        "mobilesdk_app_id": "1:50019471864:android:99777014b162a32d97860d",
         "android_client_info": {
           "package_name": "org.saintpopekerollosvi.android"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "289605575676-5csing7me517q35f22up995qg6ucimr4.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "org.saintpopekerollosvi.android",
-            "certificate_hash": "3c526c5aa9d28b5b6791a7f41aa87909b063f00c"
-          }
-        },
-        {
-          "client_id": "289605575676-r58vp3v8vb5ffdq1856rrffpsgs5j4n2.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDTTOsdWPdeOEZWZq0q0y7XZRmviLroEXY"
+          "current_key": "AIzaSyBueREFZ9ETJnKOAX3SvtjTqQYiuXxSj0s"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "289605575676-r58vp3v8vb5ffdq1856rrffpsgs5j4n2.apps.googleusercontent.com",
-              "client_type": 3
-            },
-            {
-              "client_id": "289605575676-bkh52g1v865ja5nq3rca39tac2erphma.apps.googleusercontent.com",
-              "client_type": 2,
-              "ios_info": {
-                "bundle_id": "org.saintpopekerollosvi.ios"
-              }
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

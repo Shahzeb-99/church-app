@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:saintpopekerollosvi/ui/video/play_video.dart';
-import '../../constants/app_theme.dart';
-import '../../models/video/get_video_response.dart';
+import '../announcement/announcement.dart';
 import '../home/home.dart';
 import '../live/live_video.dart';
 import '../video/video.dart';
@@ -14,17 +12,15 @@ class PageViewScreen extends StatefulWidget {
   State<PageViewScreen> createState() => _PageViewScreenState();
 }
 
-
-
 class _PageViewScreenState extends State<PageViewScreen> {
-
-@override
+  @override
   void initState() {
-  SystemChrome.setSystemUIOverlayStyle(
-    SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-  );
+    SystemChrome.setSystemUIOverlayStyle(
+      SystemUiOverlayStyle(statusBarColor: Colors.transparent,systemNavigationBarColor: Colors.transparent),
+    );
     super.initState();
   }
+
   int currentPageIndex = 0;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -51,10 +47,10 @@ class _PageViewScreenState extends State<PageViewScreen> {
 // Builds the widget that displays the current page
   Widget _buildCurrentIndexWidget() {
     // This function builds the widget that displays the current page, based on the value of the `currentIndex` variable.
-    return <Widget>[
-      const HomeScreen(),
+    return const <Widget>[
+      AnnouncementScreen(),
+      CalendarScreen(),
       LiveVideoScreen(),
-      // YoutubePlayer(item: Item(id: Id(videoId: 'ghNMbCfBv_k'))),
       VideoScreen(),
     ][currentPageIndex];
   }
@@ -65,27 +61,35 @@ class _PageViewScreenState extends State<PageViewScreen> {
     return [
       NavigationDestination(
         icon: Icon(
-          Icons.home_filled,
+          Icons.announcement,
           color: currentPageIndex == 0 ? Theme.of(context).primaryColor : Colors.black38,
         ),
-        label: 'Home',
+        label: 'Announcements',
       ),
       NavigationDestination(
         icon: Icon(
-          Icons.schedule,
+          Icons.calendar_today,
           color: currentPageIndex == 1 ? Theme.of(context).primaryColor : Colors.black38,
         ),
-        label: 'Schedule',
+        label: 'Calendar',
+      ),
+      NavigationDestination(
+        icon: Icon(
+          Icons.live_tv,
+          color: currentPageIndex == 2 ? Theme.of(context).primaryColor : Colors.black38,
+        ),
+        label: 'Live Video',
       ),
       NavigationDestination(
         icon: Icon(
           Icons.video_collection_rounded,
-          color: currentPageIndex == 2 ? Theme.of(context).primaryColor : Colors.black38,
+          color: currentPageIndex == 3 ? Theme.of(context).primaryColor : Colors.black38,
         ),
-        label: 'Video',
+        label: 'Videos',
       ),
     ];
   }
+
 
 // Builds the bottom navigation bar
   Widget _buildBottomNavBar() {
