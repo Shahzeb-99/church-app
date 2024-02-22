@@ -32,7 +32,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
       body: Observer(builder: (context) {
         return Stack(
           children: [
-            _calendarStore.isGetNotificationInProcess
+            (_calendarStore.getAllNotificationResponse?.notifications??[]).isNotEmpty
                 ? ListView.builder(
                     padding: EdgeInsets.all(8),
                     itemCount: _calendarStore.getAllNotificationResponse?.notifications?.length ?? 0,
@@ -53,7 +53,7 @@ class _AnnouncementScreenState extends State<AnnouncementScreen> {
                           ),
                         ),
                         Text(
-                          'Not Announcements',
+                          'No Announcements',
                           style: Theme.of(context).textTheme.headlineMedium!.copyWith(color: Theme.of(context).primaryColor),
                         ),
                       ],
