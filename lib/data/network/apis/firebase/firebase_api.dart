@@ -34,7 +34,8 @@ class FirebaseApi {
 
   Future<void> initLocalNotifications() async {
     const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-    final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid);
+    final DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings();
+    final InitializationSettings initializationSettings = InitializationSettings(android: initializationSettingsAndroid, iOS: initializationSettingsIOS);
 
     await _localNotifications.initialize(initializationSettings);
 
@@ -42,6 +43,7 @@ class FirebaseApi {
         .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
         ?.createNotificationChannel(_androidChannel);
   }
+
 
   Future<void> initPushNotifications() async {
     await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(

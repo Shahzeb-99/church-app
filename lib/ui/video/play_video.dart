@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:saintpopekerollosvi/di/components/service_locator.dart';
 import 'package:saintpopekerollosvi/models/video/get_video_response.dart';
 import 'package:saintpopekerollosvi/models/video/get_video_statistics_response.dart';
 import 'package:saintpopekerollosvi/stores/video/video_store.dart';
-import 'package:saintpopekerollosvi/widgets/progress_indicator_widget.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 import 'package:timeago/timeago.dart' as timeago;
 

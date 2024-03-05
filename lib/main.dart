@@ -13,6 +13,7 @@ final navigatorKey = GlobalKey<NavigatorState>();
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
+    name: 'saintpopekerollosvi',
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await FirebaseApi().initNotification();

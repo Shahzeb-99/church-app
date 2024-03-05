@@ -34,7 +34,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
 
           return RefreshIndicator(
             onRefresh: () {
-              return Future.delayed(Duration(seconds: 1));
+              return _calendarStore.getEvents();
             },
             child: SfCalendar(
               dataSource: GoogleDataSource(_calendarStore.getCalendarEventResponse?.items ?? [], context),
